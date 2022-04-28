@@ -40,6 +40,7 @@ class Choice(IntEnum):
 class Shop:
     def __init__(self):
         self.user = User() # Instantiate a user for the Shop instance
+        self.item = Item()
 
         self.currentChoice = Choice.LOOP
         while self.currentChoice != Choice.EXIT:
@@ -174,3 +175,8 @@ print(shop.user.login('username','password'))
 # The first element will be true if the action was successful and false otherwise.
 # Try running this script to see the output from the login example above.
 
+# Demo of Item methods
+shop.item.create('A1','Fahrenheit 451','12','5')
+print("$" + str(shop.item.getPrice('A1')[0]))
+
+# This shows fetching the price of an item after creating it

@@ -58,6 +58,9 @@ class User(ApplicationClass):
         self.username, self.password, self.shippingAddress, self.paymentInfo = (None, None, None, None)
         return True, 'Logged out.'
 
+    def isLoggedIn(self):
+        return self.username
+
     # User shopping functions - - - -
     def getPaymentInfo(self):
         if not self.username: return False, 'No user is logged in.'

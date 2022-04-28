@@ -42,6 +42,63 @@ class Shop:
         self.user = User() # Instantiate a user for the Shop instance
         self.item = Item()
 
+        self.currentChoice = Choice.LOOP
+        while self.currentChoice != Choice.EXIT:
+            if self.currentChoice == Choice.LOGIN:
+                self.loginAction()
+            elif self.currentChoice == Choice.CREATE_ACCOUNT:
+                self.createAccountAction()
+            elif self.currentChoice == Choice.VIEW_BY_CATEGORY:
+                pass
+            elif self.currentChoice == Choice.ADD_TO_CART:
+                pass
+            elif self.currentChoice == Choice.VIEW_CART:
+                pass
+            elif self.currentChoice == Choice.REMOVE_FROM_CART:
+                pass
+            elif self.currentChoice == Choice.CHECK_OUT:
+                pass
+            elif self.currentChoice == Choice.EDIT_SHIPPING_ADDRESS:
+                self.editShippingAddressAction()
+            elif self.currentChoice == Choice.EDIT_PAYMENT_INFORMATION:
+                self.editPaymentInformationAction()
+            elif self.currentChoice == Choice.VIEW_ORDERS:
+                pass
+            elif self.currentChoice == Choice.DELETE_ACCOUNT:
+                self.deleteAccountAction()
+            elif self.currentChoice == Choice.LOG_OUT:
+                self.logOutAction()
+        
+            print("\n- - - - - - - - - -\n")
+            self.currentChoice = self.loop(self.currentChoice)
+
+    def loginAction(self):
+        print(Back.WHITE,Fore.BLACK,"Enter your Login Information:", Style.RESET_ALL)
+        username = input("Username: ")
+        password = input("Password: ")
+
+        success, message = self.user.login(username,password)
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+
+    def createAccountAction(self):
+        print(Back.WHITE,Fore.BLACK,"To create your account, provide the following information:", Style.RESET_ALL)
+        
+        username = input("Username: ")
+        password = input("Password: ")
+
+        success, message = self.user.create(username,password)
+        
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+
+    def deleteAccountAction(self):
+        print(Back.WHITE,Fore.BLACK,"To remove your account, please provide your password:", Style.RESET_ALL)
+
         password = input("Password: ")
         success, message = self.user.delete(password)
 

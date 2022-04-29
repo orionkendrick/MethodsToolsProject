@@ -48,9 +48,9 @@ class Shop:
             elif self.currentChoice == Choice.CREATE_ACCOUNT:
                 self.createAccountAction()
             elif self.currentChoice == Choice.VIEW_BY_CATEGORY:
-                pass
+                self.viewItemsAction()
             elif self.currentChoice == Choice.ADD_TO_CART:
-                pass
+                self.addToCartAction()
             elif self.currentChoice == Choice.VIEW_CART:
                 pass
             elif self.currentChoice == Choice.REMOVE_FROM_CART:
@@ -131,6 +131,36 @@ class Shop:
         else:
             print(Fore.RED, message, Fore.RESET)
 
+    def viewItemsAction(self):
+        print(Back.WHITE,Fore.BLACK,"Here's what we currently have in stock:", Style.RESET_ALL)
+
+        items = Item().getAllItems()
+        
+        for item in items:
+            print(Fore.BLUE,f"""
+            Name: {item[1]}
+            Price: ${item[3]}
+            Description:
+                {item[2]}
+            """,Fore.RESET)
+
+    def addToCartAction(self):
+        print(Back.WHITE,Fore.BLACK,"Here's what we currently have in stock:", Style.RESET_ALL)
+
+        items = Item().getAllItems()
+        
+        for item in items:
+            print(Fore.BLUE,f'{item[0]}: {item[1]} (${item[3]})',Fore.RESET)
+
+        item_id = input("What would you like to add to your cart? Please enter the item number listed above: ")
+        success, message = self.user.cart.addItem(item_id)
+
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+
+
     def loop(self, previousChoice):
         userChoice = previousChoice # Default to looping if a user does not make a selection.
 
@@ -147,7 +177,7 @@ class Shop:
             print(Fore.GREEN,"""
             3. Exit Program
             Browse Items
-                4. View by Category
+                4. View Items
                 5. Add to Cart
             Cart Information
                 6. View Cart

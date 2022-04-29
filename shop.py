@@ -41,8 +41,6 @@ class Shop:
         self.user = User() # Instantiate a user for the Shop instance
         self.item = Item()
 
-        return
-
         self.currentChoice = Choice.LOOP
         while self.currentChoice != Choice.EXIT:
             if self.currentChoice == Choice.LOGIN:

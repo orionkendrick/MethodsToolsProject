@@ -1,17 +1,19 @@
 from lib.applicationclass import ApplicationClass
+from classes.cart import Cart
 
 # In this example, I'll create a User class that inherits from ApplicationClass
 class User(ApplicationClass):
 
     def __init__(self):
         ApplicationClass.__init__(self)
-        users = self.Table.cursor.execute('SELECT * from users').fetchall()
 
         self.userID = None
         self.username = None
         self.password = None
         self.shippingAddress = None
         self.paymentInfo = None
+
+        self.cart = None
 
     # User management functions - - - -
     def create(self, username, password):
@@ -50,6 +52,7 @@ class User(ApplicationClass):
 
         # Set local attributes to returned database values
         self.userID, self.username, self.password, self.shippingAddress, self.paymentInfo = user_info
+        self.cart = Cart(self)
         
         return True, f'Logged in as {username}.'
 

@@ -13,6 +13,7 @@ from colorama import Fore, Back, Style
 from classes.item import Item
 # from classes.order import Order
 from classes.user import User
+from classes.cart import Cart
 
 class Choice(IntEnum):
     
@@ -52,11 +53,11 @@ class Shop:
             elif self.currentChoice == Choice.ADD_TO_CART:
                 self.addToCartAction()
             elif self.currentChoice == Choice.VIEW_CART:
-                pass
+                self.viewCartAction()
             elif self.currentChoice == Choice.REMOVE_FROM_CART:
-                pass
+                self.removeFromCartAction()
             elif self.currentChoice == Choice.CHECK_OUT:
-                pass
+                self.checkOutAction()
             elif self.currentChoice == Choice.EDIT_SHIPPING_ADDRESS:
                 self.editShippingAddressAction()
             elif self.currentChoice == Choice.EDIT_PAYMENT_INFORMATION:
@@ -160,7 +161,46 @@ class Shop:
         else:
             print(Fore.RED, message, Fore.RESET)
 
-
+    def viewCartAction(self):
+        print(Back.WHITE,Fore.BLACK,"Here's what is currently in your cart:", Style.RESET_ALL)
+        
+        cart = Cart(username).get()
+        
+        for item in cart:
+            print(Fore.BLUE,f"""
+            Item ID: {item[1]}
+            Quantity: {item[2]}
+            """,Fore.RESET)
+        
+    def removeFromCartAction(self):
+        print(Back.WHITE,Fore.BLACK,"Here's what is currently in your cart:", Style.RESET_ALL)
+        
+        cart = Cart(username).get()
+        
+        for item in cart:
+            print(Fore.BLUE,f"""
+            Item ID: {item[1]}
+            Quantity: {item[2]}
+            """,Fore.RESET)
+            
+        item_id = input("What would you like to remove from your cart? Please enter the item number listed above: ")
+        success, message = self.user.cart.removeItem(item_id)
+        
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+        
+    def checkOutAction(self):
+        print(Back.WHITE,Fore.BLACK,"Checking out...", Style.RESET_ALL)
+        
+        success, message = self.user.cart.placeOrder(username)
+        
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+            
     def loop(self, previousChoice):
         userChoice = previousChoice # Default to looping if a user does not make a selection.
 

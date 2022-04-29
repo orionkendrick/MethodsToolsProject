@@ -13,13 +13,13 @@ class Item(ApplicationClass):
 
         # If an item ID is provided, load pre-existing data from table
         if id:
-            item = self.Table.cursor.execute('SELECT name, description, price, quantity FROM items WHERE id = ?',(id,)).fetchall()
+            item = self.execute('SELECT name, description, price, quantity FROM items WHERE id = ?',(id,),fetchOne=False)
             self.name, self.description, self.price, self.quantity = item[0]
 
     #Item management functions
     def load(self, id):
         try:
-            item = self.Table.cursor.execute('SELECT name, description, price, quantity FROM items WHERE id = ?',(id,)).fetchall()
+            item = self.execute('SELECT name, description, price, quantity FROM items WHERE id = ?',(id,),fetchOne=False)
             self.name, self.description, self.price, self.quantity = item[0]
         except Exception:
             return False, 'No matching item in database.'
@@ -29,10 +29,9 @@ class Item(ApplicationClass):
 
     def create(self, name, description, price, quantity=0):
         try:
-            self.Table.cursor.execute('INSERT INTO items (name, description, price, quantity) VALUES (?, ?, ?, ?)',(name, description, price, quantity))
-            self.Table.connection.commit()
+            self.execute('INSERT INTO items (name, description, price, quantity) VALUES (?, ?, ?, ?)',(name, description, price, quantity))
 
-            self.id = self.Table.cursor.execute('SELECT id FROM items WHERE name = ?', (name,)).fetchall()[0][0]
+            self.id = self.execute('SELECT id FROM items WHERE name = ?', (name,),fetchOne=False)[0][0]
 
         except Exception: # Catch any exceptions and return False to signal failure
             return False, 'Item already exists!'
@@ -45,14 +44,10 @@ class Item(ApplicationClass):
 
         return True, 'Item created.'
 
-
-
-
     def setQuantity(self, quantity):
         if type(quantity) != int or quantity < 0: return False, 'Please provide a valid positive integer.'
         try:
-            self.Table.cursor.execute('UPDATE items SET quantity = ? WHERE id = ?',(quantity, self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET quantity = ? WHERE id = ?',(quantity, self.id))
         except Exception:
             return False, 'No matching item in database.'
         
@@ -60,15 +55,13 @@ class Item(ApplicationClass):
         return True, 'Item quantity set.'
 
     def getQuantity(self):
-        quantity = self.Table.cursor.execute('SELECT quantity FROM items WHERE id = ?',(self.id,))
-        quantity = self.Table.cursor.fetchall()
+        quantity = self.execute('SELECT quantity FROM items WHERE id = ?',(self.id,),fetchOne=False)
         return True, quantity[0]
 
     def decrement(self, byNum=1):
         if type(byNum) != int or byNum < 0: return False, 'Please provide a valid positive integer.'
         try:
-            self.Table.cursor.execute('UPDATE items SET quantity = ? WHERE id = ?',(max(self.quantity - byNum,0), self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET quantity = ? WHERE id = ?',(max(self.quantity - byNum,0), self.id))
         except:
             return False, 'Error decrementing item quantity'
         
@@ -77,8 +70,7 @@ class Item(ApplicationClass):
     def increment(self, byNum=1):
         if type(byNum) != int or byNum < 0: return False, 'Please provide a valid positive integer.'
         try:
-            self.Table.cursor.execute('UPDATE items SET quantity = ? WHERE id = ?',(max(self.quantity + byNum,0), self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET quantity = ? WHERE id = ?',(max(self.quantity + byNum,0), self.id))
         except:
             return False, 'Error incrementing item quantity'
         
@@ -86,8 +78,7 @@ class Item(ApplicationClass):
     
     def setName(self, name):
         try:
-            self.Table.cursor.execute('UPDATE items SET name = ? WHERE id = ?',(name, self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET name = ? WHERE id = ?',(name, self.id))
         except Exception:
             return False, 'No matching item in database.'
         
@@ -95,15 +86,13 @@ class Item(ApplicationClass):
         return True, 'Item name set.'
 
     def getName(self):
-        name = self.Table.cursor.execute('SELECT name FROM items WHERE id = ?',(self.id,))
-        name = self.Table.cursor.fetchall()
-        return True, name[0]
+        name = self.execute('SELECT name FROM items WHERE id = ?',(self.id,),fetchOne=False)
+        return True, name[0][0]
 
     def setPrice(self, price):
         if type(price) != float or price < 0: return False, 'Please provide a valid float to represent the price.'
         try:
-            self.Table.cursor.execute('UPDATE items SET price = ? WHERE id = ?',(price, self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET price = ? WHERE id = ?',(price, self.id))
         except Exception:
             return False, 'No matching item in database.'
         
@@ -111,15 +100,13 @@ class Item(ApplicationClass):
         return True, 'Item price set.'
     
     def getPrice(self):
-        price = self.Table.cursor.execute('SELECT price FROM items WHERE id = ?', (self.id,))
-        price = self.Table.cursor.fetchall()
+        price = self.execute('SELECT price FROM items WHERE id = ?', (self.id,),fetchOne=False)
 
         return True, price[0]
 
     def setDescription(self, description):
         try:
-            self.Table.cursor.execute('UPDATE items SET description = ? WHERE id = ?', (description, self.id))
-            self.Table.connection.commit()
+            self.execute('UPDATE items SET description = ? WHERE id = ?', (description, self.id))
         except Exception:
             return False, 'No matching item in database.'
         
@@ -127,8 +114,11 @@ class Item(ApplicationClass):
         return True, 'Item description set.'
     
     def getDescription(self):
-        description = self.Table.cursor.execute('SELECT description FROM items WHERE id = ?', (self.id,))
-        description = self.Table.cursor.fetchall()
+        description = self.execute('SELECT description FROM items WHERE id = ?', (self.id,),fetchOne=False)
         return True, description[0]
+
+    def getAllItems(self):
+        """ Returns all items in inventory. """
+        return self.execute('SELECT * FROM items WHERE quantity > 0', [], fetchOne=False)
 
     

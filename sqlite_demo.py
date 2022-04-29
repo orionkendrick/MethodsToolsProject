@@ -15,18 +15,18 @@ class User(ApplicationClass):
         ApplicationClass.__init__(self)
 
         # At this point, SQL can be run on the database using the following syntax:
-        # self.Table.cursor.execute('SQL QUERY')
+        # self.execute('SQL QUERY')
 
         # To get rows from the database, use .fetchall() on the return of the above function.
         # Here's an example for selecting all rows from the user table:
-        users = self.Table.cursor.execute('SELECT * from users').fetchall()
+        users = self.execute('SELECT * from users', [], fetchOne=False)
         print(users)
 
         # When inserting or modifying data, make sure to run self.Table.connection.commit() afterwards.
         # This method saves any changes you've made to the database. For example:
 
         # - - - - - -
-        # self.Table.cursor.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+        # self.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
         # self.Table.connection.commit()
         # - - - - - - 
 

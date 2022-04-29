@@ -18,8 +18,7 @@ class User(ApplicationClass):
     # User management functions - - - -
     def create(self, username, password):
         try:
-            self.Table.cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)',(username, password))
-            self.Table.connection.commit()
+            self.execute('INSERT INTO users (username, password) VALUES (?, ?)',(username, password))
         except Exception: # Catch any exceptions and return False to signal failure
             return False, 'User already exists!'
         return True, 'User created.'
@@ -27,14 +26,13 @@ class User(ApplicationClass):
     def delete(self, password):
         if not self.username: return False, 'No user is logged in.'
 
-        user_info = self.Table.cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (self.username, password)).fetchone()
+        user_info = self.execute('SELECT * FROM users WHERE username = ? AND password = ?', (self.username, password),fetchOne=True)
         
         # If no user matches the passed username and password, return a failure
         if not user_info: return False, 'Incorrect authentication information provided.'
 
         # Remove user from database and log out instance
-        self.Table.cursor.execute('DELETE FROM users WHERE username = ? AND password = ?', (self.username, password))
-        self.Table.connection.commit()
+        self.execute('DELETE FROM users WHERE username = ? AND password = ?', (self.username, password))
 
         self.logout()
         return True, 'User deleted.'
@@ -43,7 +41,7 @@ class User(ApplicationClass):
         if self.username: self.logout() # If a user is already logged in, log out first.
 
         try:
-            user_info = self.Table.cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password)).fetchone()
+            user_info = self.execute('SELECT * FROM users WHERE username = ? AND password = ?', (username, password),fetchOne=True)
         except Exception: # Catch any exceptions and return False to signal failure
             return False, 'Error attempting to login.'
         
@@ -51,6 +49,7 @@ class User(ApplicationClass):
         if not user_info: return False, 'Incorrect authentication information provided.'
 
         # Set local attributes to returned database values
+        print(user_info)
         self.userID, self.username, self.password, self.shippingAddress, self.paymentInfo = user_info
         self.cart = Cart(self)
         
@@ -79,8 +78,7 @@ class User(ApplicationClass):
         if not cardNum.isnumeric() or len(cardNum) != 16: return False, 'Please provide a valid credit card number with no spaces or dashes.'
 
         # Update database
-        self.Table.cursor.execute('UPDATE users SET payment = ? WHERE username = ?',(cardNum, self.username))
-        self.Table.connection.commit()
+        self.execute('UPDATE users SET payment = ? WHERE username = ?',(cardNum, self.username))
 
         # Update local attributes
         self.paymentInfo = cardNum
@@ -96,8 +94,7 @@ class User(ApplicationClass):
         if not self.username: return False, 'No user is logged in.'
 
         # Update database
-        self.Table.cursor.execute('UPDATE users SET address = ? WHERE username = ?',(newAddress, self.username))
-        self.Table.connection.commit()
+        self.execute('UPDATE users SET address = ? WHERE username = ?',(newAddress, self.username))
 
         # Update local attributes
         self.shippingAddress = newAddress

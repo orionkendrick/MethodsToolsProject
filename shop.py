@@ -12,7 +12,7 @@ from colorama import Fore, Back, Style
 # Import are classes from the /classes sub-directory
 from classes.cart import Cart
 from classes.item import Item
-from classes.order import Order
+# from classes.order import Order
 from classes.user import User
 
 class Choice(IntEnum):
@@ -176,7 +176,11 @@ print(shop.user.login('username','password'))
 # Try running this script to see the output from the login example above.
 
 # Demo of Item methods
-shop.item.create('A1','Fahrenheit 451','12','5')
-print("$" + str(shop.item.getPrice('A1')[0]))
-
+shop.item.create('The Giver','A book.', 19.99, 12)
+shop.item.load(7)
+print(shop.item.setName('New Product Name'))
+print(shop.item.setPrice(22.32))
+print(shop.item.getPrice())
+print(shop.item.setDescription('New description!'))
+print(shop.item.setQuantity(12309))
 # This shows fetching the price of an item after creating it

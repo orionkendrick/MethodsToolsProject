@@ -74,6 +74,16 @@ class Item(ApplicationClass):
         
         return True, 'Item quantity decremented.'
     
+    def increment(self, byNum=1):
+        if type(byNum) != int or byNum < 0: return False, 'Please provide a valid positive integer.'
+        try:
+            self.Table.cursor.execute('UPDATE items SET quantity = ? WHERE id = ?',(max(self.quantity + byNum,0), self.id))
+            self.Table.connection.commit()
+        except:
+            return False, 'Error incrementing item quantity'
+        
+        return True, 'Item quantity incremented.'
+    
     def setName(self, name):
         try:
             self.Table.cursor.execute('UPDATE items SET name = ? WHERE id = ?',(name, self.id))

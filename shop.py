@@ -10,7 +10,6 @@ except ImportError:
 from colorama import Fore, Back, Style
 
 # Import are classes from the /classes sub-directory
-from classes.cart import Cart
 from classes.item import Item
 # from classes.order import Order
 from classes.user import User
@@ -182,5 +181,5 @@ print(shop.item.setName('New Product Name'))
 print(shop.item.setPrice(22.32))
 print(shop.item.getPrice())
 print(shop.item.setDescription('New description!'))
-print(shop.item.setQuantity(12309))
+# print(shop.item.setQuantity(12309))
 # This shows fetching the price of an item after creating it

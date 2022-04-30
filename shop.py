@@ -13,7 +13,7 @@ from colorama import Fore, Back, Style
 from classes.item import Item
 # from classes.order import Order
 from classes.user import User
-from classes.cart import Cart
+# from classes.cart import Cart
 
 class Choice(IntEnum):
     
@@ -48,26 +48,27 @@ class Shop:
                 self.loginAction()
             elif self.currentChoice == Choice.CREATE_ACCOUNT:
                 self.createAccountAction()
-            elif self.currentChoice == Choice.VIEW_BY_CATEGORY:
-                self.viewItemsAction()
-            elif self.currentChoice == Choice.ADD_TO_CART:
-                self.addToCartAction()
-            elif self.currentChoice == Choice.VIEW_CART:
-                self.viewCartAction()
-            elif self.currentChoice == Choice.REMOVE_FROM_CART:
-                self.removeFromCartAction()
-            elif self.currentChoice == Choice.CHECK_OUT:
-                self.checkOutAction()
-            elif self.currentChoice == Choice.EDIT_SHIPPING_ADDRESS:
-                self.editShippingAddressAction()
-            elif self.currentChoice == Choice.EDIT_PAYMENT_INFORMATION:
-                self.editPaymentInformationAction()
-            elif self.currentChoice == Choice.VIEW_ORDERS:
-                pass
-            elif self.currentChoice == Choice.DELETE_ACCOUNT:
-                self.deleteAccountAction()
-            elif self.currentChoice == Choice.LOG_OUT:
-                self.logOutAction()
+            if self.user.isLoggedIn():
+                if self.currentChoice == Choice.VIEW_BY_CATEGORY:
+                    self.viewItemsAction()
+                elif self.currentChoice == Choice.ADD_TO_CART:
+                    self.addToCartAction()
+                elif self.currentChoice == Choice.VIEW_CART:
+                    self.viewCartAction()
+                elif self.currentChoice == Choice.REMOVE_FROM_CART:
+                    self.removeFromCartAction()
+                elif self.currentChoice == Choice.CHECK_OUT:
+                    self.checkOutAction()
+                elif self.currentChoice == Choice.EDIT_SHIPPING_ADDRESS:
+                    self.editShippingAddressAction()
+                elif self.currentChoice == Choice.EDIT_PAYMENT_INFORMATION:
+                    self.editPaymentInformationAction()
+                elif self.currentChoice == Choice.VIEW_ORDERS:
+                    pass
+                elif self.currentChoice == Choice.DELETE_ACCOUNT:
+                    self.deleteAccountAction()
+                elif self.currentChoice == Choice.LOG_OUT:
+                    self.logOutAction()
         
             print("\n- - - - - - - - - -\n")
             self.currentChoice = self.loop(self.currentChoice)
@@ -164,24 +165,22 @@ class Shop:
     def viewCartAction(self):
         print(Back.WHITE,Fore.BLACK,"Here's what is currently in your cart:", Style.RESET_ALL)
         
-        cart = Cart(username).get()
+        cart = self.user.cart.get()
         
         for item in cart:
-            print(Fore.BLUE,f"""
-            Item ID: {item[1]}
-            Quantity: {item[2]}
-            """,Fore.RESET)
+            item_obj = Item(item[1])
+            item_obj.getName()
+            print(Fore.BLUE,f'{item[1]}: {item_obj.getName()[1]} (${item_obj.getPrice()[1]})',Fore.RESET)
         
     def removeFromCartAction(self):
         print(Back.WHITE,Fore.BLACK,"Here's what is currently in your cart:", Style.RESET_ALL)
         
-        cart = Cart(username).get()
+        cart = self.user.cart.get()
         
         for item in cart:
-            print(Fore.BLUE,f"""
-            Item ID: {item[1]}
-            Quantity: {item[2]}
-            """,Fore.RESET)
+            item_obj = Item(item[1])
+            item_obj.getName()
+            print(Fore.BLUE,f'{item[1]}: {item_obj.getName()[1]} (${item_obj.getPrice()[1]})',Fore.RESET)
             
         item_id = input("What would you like to remove from your cart? Please enter the item number listed above: ")
         success, message = self.user.cart.removeItem(item_id)
@@ -194,7 +193,7 @@ class Shop:
     def checkOutAction(self):
         print(Back.WHITE,Fore.BLACK,"Checking out...", Style.RESET_ALL)
         
-        success, message = self.user.cart.placeOrder(username)
+        success, message = self.user.cart.placeOrder()
         
         if success:
             print(Fore.GREEN, message, Fore.RESET)
@@ -236,8 +235,8 @@ class Shop:
 shop = Shop()
 
 # Demo of User methods
-shop.user.create('username','password')
-print(shop.user.login('username','password'))
+# shop.user.create('username','password')
+# print(shop.user.login('username','password'))
 
 # Each user method returns a tuple of the following format:
 #   (Boolean True/False, Message)
@@ -245,11 +244,11 @@ print(shop.user.login('username','password'))
 # Try running this script to see the output from the login example above.
 
 # Demo of Item methods
-shop.item.create('The Giver','A book.', 19.99, 12)
-shop.item.load(7)
-print(shop.item.setName('New Product Name'))
-print(shop.item.setPrice(22.32))
-print(shop.item.getPrice())
-print(shop.item.setDescription('New description!'))
+# shop.item.create('The Giver','A book.', 19.99, 12)
+# shop.item.load(7)
+# print(shop.item.setName('New Product Name'))
+# print(shop.item.setPrice(22.32))
+# print(shop.item.getPrice())
+# print(shop.item.setDescription('New description!'))
 # print(shop.item.setQuantity(12309))
 # This shows fetching the price of an item after creating it

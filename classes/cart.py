@@ -104,17 +104,14 @@ class Cart(ApplicationClass):
     #     itemid1 = self.item_ob.getId(itemName)
     #     status = 'In Cart'
     
-    def removeItem(self, name):
+    def removeItem(self, item_id):
 
-        matching_items = self.execute('SELECT id, quantity FROM items WHERE name = ?',(name,),fetchOne=False)
+        matching_items = self.execute('SELECT id, quantity FROM items WHERE id = ?',(item_id,),fetchOne=False)
         if len(matching_items) != 1:
-            return False, 'No items found with this name.'
-        
-        item_id, item_quantity = matching_items[0]
+            return False, 'No items found with this item number.'
 
         try:
             self.execute('DELETE FROM orders WHERE user_id = ? AND item_id = ? AND status = 0', (self.user.userID, item_id,))
-
         except:
             return False, 'Item is not in shopping cart.'
 
@@ -136,7 +133,7 @@ class Cart(ApplicationClass):
 
         return True, 'Cart was cleared.'
 
-    def placeOrder(self, username):         # should work?
+    def placeOrder(self):         # should work?
         try:
             for order in self.orders:
                 self.execute('UPDATE orders SET status = 1 WHERE  id = ?', (order[0],))

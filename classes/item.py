@@ -102,7 +102,7 @@ class Item(ApplicationClass):
     def getPrice(self):
         price = self.execute('SELECT price FROM items WHERE id = ?', (self.id,),fetchOne=False)
 
-        return True, price[0]
+        return True, price[0][0]
 
     def setDescription(self, description):
         try:

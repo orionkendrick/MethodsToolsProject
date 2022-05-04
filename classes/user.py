@@ -49,7 +49,6 @@ class User(ApplicationClass):
         if not user_info: return False, 'Incorrect authentication information provided.'
 
         # Set local attributes to returned database values
-        print(user_info)
         self.userID, self.username, self.password, self.shippingAddress, self.paymentInfo = user_info
         self.cart = Cart(self)
         

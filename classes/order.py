@@ -3,34 +3,13 @@ from lib.applicationclass import ApplicationClass
 # In this example, I'll create a Order class that inherits from ApplicationClass
 class Order(ApplicationClass):
     def __init__(self):
-      
-        self.userID = None
-        self.username = None
-        self.itemID = None
-        self.quantity = None
-        self.status = None
-
-        self.cart = None
+        pass
     
-   from lib.applicationclass import ApplicationClass
+    # lists all orders associated with the user
+    def viewOrders(self, userID):
+        return self.execute('SELECT item_id, item_quantity FROM orders WHERE user_id = ? AND status = 1', (userID,), fetchOne=False)
 
-# In this example, I'll create a Order class that inherits from ApplicationClass
-class Order(ApplicationClass):
-    def __init__(self):
-      
-        self.orderID = 0
-        self.items[]
-
-    
-#initializer method    
-    def Order(self, orderID):
-    
-#lists all orders associated with the user
-    def viewOrders(self, items):
-      for item in orderID.items:
-        print(f'Items are: {orderID.items}')
-
-#cancels the oder
+    # cancels the oder (NOT IMPLEMENTED YET -- not a part of requirements)
     def cancel(self):
-      orderToCancel= input('Enter orderID of order you would like to cancel:')
-      return void f"You chose to cancel order: {orderToCancel}"
+        orderToCancel = input('Enter orderID of order you would like to cancel:')
+        return True, f"You chose to cancel order: {orderToCancel}"

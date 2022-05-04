@@ -11,7 +11,7 @@ from colorama import Fore, Back, Style
 
 # Import are classes from the /classes sub-directory
 from classes.item import Item
-# from classes.order import Order
+from classes.order import Order
 from classes.user import User
 # from classes.cart import Cart
 
@@ -41,6 +41,7 @@ class Shop:
     def __init__(self):
         self.user = User() # Instantiate a user for the Shop instance
         self.item = Item()
+        self.order = Order()
 
         self.currentChoice = Choice.LOOP
         while self.currentChoice != Choice.EXIT:
@@ -145,7 +146,7 @@ class Shop:
 
     def viewOrdersAction(self):
         userID = self.user.userID
-        orders = self.user.cart.viewOrders(userID)
+        orders = self.order.viewOrders(userID)
 
         print("Previous Orders:")
 

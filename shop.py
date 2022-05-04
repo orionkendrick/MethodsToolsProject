@@ -68,7 +68,7 @@ class Shop:
                 elif self.currentChoice == Choice.DELETE_ACCOUNT:
                     self.deleteAccountAction()
                 elif self.currentChoice == Choice.LOG_OUT:
-                    self.logOutAction()
+                    self.logoutAction()
         
             print("\n- - - - - - - - - -\n")
             self.currentChoice = self.loop(self.currentChoice)
@@ -79,6 +79,13 @@ class Shop:
         password = input("Password: ")
 
         success, message = self.user.login(username,password)
+        if success:
+            print(Fore.GREEN, message, Fore.RESET)
+        else:
+            print(Fore.RED, message, Fore.RESET)
+
+    def logoutAction(self):
+        success, message = self.user.logout()
         if success:
             print(Fore.GREEN, message, Fore.RESET)
         else:
@@ -124,6 +131,9 @@ class Shop:
 
     def editPaymentInformationAction(self):
         print(Back.WHITE,Fore.BLACK,"Edit your payment info.", Style.RESET_ALL)
+        success, paymentInfo = self.user.getPaymentInfo()
+        if success:
+            print(Back.WHITE,Fore.BLACK,f'Your current payment info: {paymentInfo}', Style.RESET_ALL)
 
         newCardNum = input("Enter your Card Number: ")
 

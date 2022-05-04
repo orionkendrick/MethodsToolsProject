@@ -41,7 +41,6 @@ class Cart(ApplicationClass):
 
         # Decrement the item in inventory
         item = Item(item_id)
-        print(item.decrement())
 
         return True, f'"{item.getName()[1]}" was added to the cart.'    
 

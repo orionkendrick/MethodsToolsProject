@@ -141,7 +141,7 @@ class Shop:
 
         for order in orders:
             print(Fore.BLUE,f"""
-            Book: {Item(order[0]).getName()[0]}
+            Book: {Item(order[0]).getName()[1]}
             Quantity: {order[1]}
             """,Fore.RESET)
 

@@ -7,7 +7,6 @@ class ApplicationClass:
         cursor = None
 
     def execute(self, sql, params=[], fetchOne=False):
-        print("EXECUTING")
         self.Table.connection = sqlite3.connect('lib/db.sqlite')
         self.Table.cursor = self.Table.connection.cursor()
 

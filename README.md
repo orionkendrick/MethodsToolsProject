@@ -1,6 +1,11 @@
 # Shop
 This is a simple, CLI shopping application written in Python. The main program file is located in `shop.py`.
 
+## Default User
+A default user exists for testing purposes:
+Username: `default`
+Password: `password`
+
 ## Database Introduction
 This project makes use of an SQLite database. The actual database is just a file located in `lib/db.sqlite`. To view, insert, or modify data during development, you can use this free program: https://sqlitebrowser.org
 

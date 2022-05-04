@@ -144,3 +144,6 @@ class Cart(ApplicationClass):
         self.__updateOrders()
 
         return True, "Order was placed."
+
+    def viewOrders(self, userID):   # might work
+        return self.execute('SELECT item_id, item_quantity FROM orders WHERE user_id = ?', (userID,), fetchOne=False)

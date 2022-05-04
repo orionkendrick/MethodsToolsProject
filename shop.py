@@ -64,7 +64,7 @@ class Shop:
                 elif self.currentChoice == Choice.EDIT_PAYMENT_INFORMATION:
                     self.editPaymentInformationAction()
                 elif self.currentChoice == Choice.VIEW_ORDERS:
-                    pass
+                    self.viewOrdersAction()
                 elif self.currentChoice == Choice.DELETE_ACCOUNT:
                     self.deleteAccountAction()
                 elif self.currentChoice == Choice.LOG_OUT:
@@ -132,6 +132,18 @@ class Shop:
             print(Fore.GREEN, message, Fore.RESET)
         else:
             print(Fore.RED, message, Fore.RESET)
+
+    def viewOrdersAction(self):
+        userID = self.user.userID
+        orders = self.user.cart.viewOrders(userID)
+
+        print("Previous Orders:")
+
+        for order in orders:
+            print(Fore.BLUE,f"""
+            Book: {Item(order[0]).getName()[0]}
+            Quantity: {order[1]}
+            """,Fore.RESET)
 
     def viewItemsAction(self):
         print(Back.WHITE,Fore.BLACK,"Here's what we currently have in stock:", Style.RESET_ALL)
